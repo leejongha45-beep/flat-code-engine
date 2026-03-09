@@ -1,0 +1,58 @@
+# ── 빌드 디렉토리 ──────────────────────────────────────────────────────────
+build/
+out/
+
+# ── CMake 생성 파일 ─────────────────────────────────────────────────────────
+CMakeCache.txt
+CMakeFiles/
+CMakePresets.json.user
+cmake_install.cmake
+CPackConfig.cmake
+CPackSourceConfig.cmake
+Makefile
+compile_commands.json
+
+# ── FetchContent 다운로드 캐시 ──────────────────────────────────────────────
+_deps/
+
+# ── 빌드 산출물 ────────────────────────────────────────────────────────────
+*.lib
+*.a
+*.so
+*.dylib
+*.pyd
+*.pdb
+*.obj
+*.o
+*.exe
+
+# ── Visual Studio ───────────────────────────────────────────────────────────
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.dir/
+x64/
+Debug/
+Release/
+.vs/
+
+# ── JetBrains (CLion) ──────────────────────────────────────────────────────
+.idea/
+cmake-build-*/
+
+# ── Xcode ───────────────────────────────────────────────────────────────────
+*.xcodeproj/
+*.xcworkspace/
+xcuserdata/
+
+# ── Python ─────────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
+
+# ── OS ─────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini

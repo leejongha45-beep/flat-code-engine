@@ -1,0 +1,69 @@
+name: Build Wheels & Publish
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  build-wheels:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+        python: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+
+    name: Wheel (${{ matrix.os }}, py${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Install build tools
+        run: pip install build scikit-build-core pybind11
+
+      - name: Build wheel
+        run: python -m build --wheel --outdir wheelhouse
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheels-${{ matrix.os }}-py${{ matrix.python }}
+          path: wheelhouse/*.whl
+
+  build-sdist:
+    name: Source distribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build sdist
+        run: pip install build && python -m build --sdist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sdist
+          path: dist/*.tar.gz
+
+  publish:
+    name: Publish to PyPI
+    needs: [build-wheels, build-sdist]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    permissions:
+      id-token: write
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
